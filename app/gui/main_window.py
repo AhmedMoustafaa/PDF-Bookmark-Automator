@@ -28,7 +28,7 @@ class PDFBookmarkerApp(ctk.CTk):
         self.json_data = None
         self.pdf_file = ""
         self.ocr_cache = {}
-
+        self.full_text = ''
         self.create_widgets()
         self.configure_menu()
 
@@ -186,7 +186,7 @@ class PDFBookmarkerApp(ctk.CTk):
                 full_text += text + "\n"
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to process {os.path.basename(img_path)}:\n{str(e)}")
-
+        self.full_text = full_text
         self.ocr_output.delete("1.0", "end")
         self.ocr_output.insert("end", full_text)
 
@@ -212,7 +212,8 @@ class PDFBookmarkerApp(ctk.CTk):
         }
     ]
 }
-respect Hierarchy. So include Chapters, Sections, and Subsections as Children to one another, you may need to OCR if it's scanned and doesn't have text"""
+respect Hierarchy. So include Chapters, Sections, and Subsections as Children to one another, you may need to OCR if it's scanned and doesn't have text
+""" + self.full_text
 
         try:
             openai.api_key = self.api_key
@@ -371,8 +372,25 @@ respect Hierarchy. So include Chapters, Sections, and Subsections as Children to
 
     # Helper methods
     def copy_template(self):
-        template = """Please convert this table of contents into JSON format..."""
-        pyperclip.copy(template)
+        prompt = """Please convert this table of contents into a JSON structure following this exact format:
+        {
+            "toc": [
+                {
+                    "title": "Main Chapter Title",
+                    "page": 1,
+                    "children": [
+                        {"title": "Subsection Title", "page": 2},
+                        {"title": "Another Subsection", "page": 3}
+                    ]
+                },
+                {
+                    "title": "Appendix",
+                    "page": 4
+                }
+            ]
+        }
+        respect Hierarchy. So include Chapters, Sections, and Subsections as Children to one another, you may need to OCR if it's scanned and doesn't have text"""
+        pyperclip.copy(prompt)
         messagebox.showinfo("Template Copied", "LLM prompt template copied to clipboard!")
 
     def load_json_file(self):
