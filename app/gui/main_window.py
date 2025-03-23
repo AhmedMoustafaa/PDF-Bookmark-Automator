@@ -10,6 +10,7 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox, scrolledtext
 import openai
 import tkinter as tk
+import io
 # Configure appearance
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -248,16 +249,21 @@ respect Hierarchy. So include Chapters, Sections, and Subsections as Children to
             mat = fitz.Matrix(3, 3)
             pix = page.get_pixmap(matrix=mat)
 
-            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
-                pix.save(tmp.name)
-                img = Image.open(tmp.name)
-                os.unlink(tmp.name)
+            try:
+                # Process image entirely in memory
+                img_data = pix.tobytes(output="png")  # Get PNG bytes directly
+                img = Image.open(io.BytesIO(img_data))  # Open from memory
 
-            if self.tesseract_path:
-                pytesseract.pytesseract.tesseract_cmd = self.tesseract_path
+                if self.tesseract_path:
+                    pytesseract.pytesseract.tesseract_cmd = self.tesseract_path
 
-            data = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT)
+                data = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT)
 
+            finally:
+                # Ensure resources are cleaned up
+                img.close() if 'img' in locals() else None
+
+            # Process OCR results
             self.ocr_cache[page_num] = []
             for i in range(len(data['text'])):
                 if data['text'][i].strip():
@@ -266,6 +272,7 @@ respect Hierarchy. So include Chapters, Sections, and Subsections as Children to
                         'x': data['left'][i] / 3,
                         'y': data['top'][i] / 3
                     })
+
             return self.ocr_cache[page_num]
 
         def find_title_position(page, title):
