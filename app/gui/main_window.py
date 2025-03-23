@@ -277,25 +277,40 @@ respect Hierarchy. So include Chapters, Sections, and Subsections as Children to
 
         def find_title_position(page, title):
             clean_title = clean_text(title)
+            doc = page.parent  # Get the document from the page object
+            page_num = page.number
+            start_page = max(0, page_num - 2)
+            end_page = min(len(doc) - 1, page_num + 2)
 
-            # Try native text search first
-            rects = page.search_for(title)
-            if rects:
-                return fitz.Point(rects[0].x0, rects[0].y0)
+            # Search strategy: current page → previous pages → next pages
+            search_order = [page_num] + \
+                           list(range(max(0, page_num - 1), page_num)) + \
+                           list(range(page_num + 1, min(len(doc), page_num + 3)))
 
-            # Use OCR if enabled and needed
-            if self.ocr_var.get() and len(page.get_text()) < 50:
-                ocr_data = ocr_page(page.number)
-                for item in ocr_data:
-                    if clean_text(item['text']) == clean_title:
-                        return fitz.Point(item['x'], item['y'])
+            for pnum in search_order:
+                current_page = doc[pnum]
 
-                for word in clean_title.split():
+                # 1. Try native text search first
+                rects = current_page.search_for(title)
+                if rects:
+                    return fitz.Point(rects[0].x0, rects[0].y0)
+
+                # 2. Fallback to OCR if needed
+                if self.ocr_var.get() and len(current_page.get_text()) < 50:
+                    ocr_data = ocr_page(pnum)
+
+                    # Full title match
                     for item in ocr_data:
-                        if clean_text(item['text']) == clean_text(word):
+                        if clean_text(item['text']) == clean_title:
                             return fitz.Point(item['x'], item['y'])
 
-            # Fallback position
+                    # Partial word match
+                    for word in clean_title.split():
+                        for item in ocr_data:
+                            if clean_text(item['text']) == clean_text(word):
+                                return fitz.Point(item['x'], item['y'])
+
+            # 3. Final fallback if nothing found in ±2 pages
             return fitz.Point(50, 50)
 
         def process_entries(entries, level):
