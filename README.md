@@ -140,3 +140,10 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) for text recognition.
 - [OpenAI](https://openai.com/) for AI-powered JSON generation.
 - [REPO: pdf-bookmark](https://github.com/ifnoelse/pdf-bookmark) inspired by the need and this old REPO written with JAVA
+
+
+<!-- TRAFFIC_START -->
+**📊 GitHub Traffic (Last 14 Days)**
+- Clones: Loading...
+- Views: Loading...
+<!-- TRAFFIC_END -->
