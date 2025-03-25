@@ -1,4 +1,6 @@
-# PDF Bookmark Automator [![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/AhmedMoustafaa/420bd07b5cc1be6f609b6da9f116a3f3/raw/clone.json&logo=github)](https://github.com/MShawon/github-clone-count-badge)
+# PDF Bookmark Automator [![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/AhmedMoustafaa/420bd07b5cc1be6f609b6da9f116a3f3/raw/clone.json&logo=github)](https://github.com/MShawon/github-clone-count-badge) <img src="https://visitor-badge.laobi.icu/badge?page_id=AhmedMoustafaa.AhmedMousafaa&"  />
+
+
 
 
 ![Demo](images/tutorial.gif)
@@ -140,10 +142,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) for text recognition.
 - [OpenAI](https://openai.com/) for AI-powered JSON generation.
 - [REPO: pdf-bookmark](https://github.com/ifnoelse/pdf-bookmark) inspired by the need and this old REPO written with JAVA
-
-
-<!-- TRAFFIC_START -->
-## GitHub Traffic (Last 14 Days)
-- Clones: 64
-- Views: 61
-<!-- TRAFFIC_END -->
