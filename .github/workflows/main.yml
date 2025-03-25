@@ -24,7 +24,7 @@ jobs:
           
           sed -i "/<!-- TRAFFIC_START -->/,/<!-- TRAFFIC_END -->/c\\
           <!-- TRAFFIC_START -->\\
-          **📊 GitHub Traffic (Last 14 Days)**\\
+          ## GitHub Traffic (Last 14 Days)\\
           - Clones: $CLONES\\
           - Views: $VIEWS\\
           <!-- TRAFFIC_END -->" README.md
